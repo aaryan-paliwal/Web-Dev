@@ -1,0 +1,79 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #e0f7fa;
+    margin: 0;
+    padding: 20px;
+}
+
+.portfolio {
+    background: linear-gradient(135deg, #ffffff, #e1bee7);
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+}
+
+.profile-photo {
+    width: 150px;
+    border-radius: 50%;
+    border: 5px solid #00796b;
+}
+
+h2, h3 {
+    color: #00796b;
+}
+
+.skills ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.skills li {
+    background: #00796b;
+    color: white;
+    padding: 5px;
+    margin: 5px 0;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.skills li:hover {
+    background: #004d40;
+}
+
+.project-thumbnails img {
+    width: 100px;
+    margin: 5px;
+    transition: transform 0.3s;
+}
+
+.project-thumbnails img:hover {
+    transform: scale(1.1);
+}
+
+.contact form {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact input, .contact textarea {
+    margin: 5px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.contact button {
+    background-color: #00796b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.contact button:hover {
+    background-color: #004d40;
+}
