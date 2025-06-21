@@ -1,47 +1,29 @@
 const express = require("express");
-const { MongoClient } = require("mongodb");
-require("dotenv").config(); // Load environment variables from .env
+require("dotenv").config();
+const mongoose = require("mongoose");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 const PORT = 3000;
 
-// MongoDB URI from .env
-const uri = process.env.MONGO_URI;
-const client = new MongoClient(uri);
-
 // Middleware
-app.use(express.json()); // To parse JSON
+app.use(express.json());
 
-// MongoDB Connection
-async function connectDB() {
-  try {
-    await client.connect();
-    console.log("✅ Connected to MongoDB Atlas!");
-  } catch (error) {
-    console.error("❌ MongoDB connection error:", error);
-  }
-}
-connectDB(); // Start connection
+// MongoDB connection
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => console.error("❌ MongoDB connection error", err));
 
-// Test route
+// Routes
+app.use("/auth", authRoutes);
+
 app.get("/", (req, res) => {
-  res.send("API is working!");
+  res.send("API is running");
 });
 
-// Example: fetch all documents from a collection
-app.get("/data", async (req, res) => {
-  try {
-    const db = client.db("test"); // use your database name
-    const collection = db.collection("demo"); // use your collection name
-    const data = await collection.find().toArray();
-    res.json(data);
-  } catch (err) {
-    res.status(500).json({ error: "Failed to fetch data" });
-  }
-});
-
-// Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
+
 

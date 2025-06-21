@@ -1,0 +1,26 @@
+# ### Test POST /data
+# POST http://localhost:3000/data
+# Content-Type: application/json
+
+# {
+#   "name": "Maddison",
+#   "role": "HR Manager"
+# }
+
+
+# ### Test PUT /data/:id
+# PUT http://localhost:3000/data/6856426f8fde59243d1e085f
+# Content-Type: application/json
+
+# {
+#   "role": "CEO"
+# }
+
+# ### Test DELETE /data/:id
+# DELETE http://localhost:3000/data/685645cd389be66597817d58
+
+# # Get all documents
+# GET http://localhost:3000/data
+
+# # Get single document by ID
+# GET http://localhost:3000/data/685646eb8d74f44599f56bbf

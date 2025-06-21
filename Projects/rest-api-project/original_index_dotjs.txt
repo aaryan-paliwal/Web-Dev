@@ -1,0 +1,129 @@
+// const express = require("express");
+// const { MongoClient, ObjectId } = require("mongodb");
+// require("dotenv").config(); // Load environment variables from .env
+
+// const app = express();
+// const PORT = 3000;
+
+// // MongoDB URI from .env
+// const uri = process.env.MONGO_URI;
+// const client = new MongoClient(uri);
+
+// // Middleware
+// app.use(express.json()); // To parse JSON
+
+// // MongoDB Connection
+// async function connectDB() {
+//   try {
+//     await client.connect();
+//     console.log("✅ Connected to MongoDB Atlas!");
+//   } catch (error) {
+//     console.error("❌ MongoDB connection error:", error);
+//   }
+// }
+// connectDB(); // Start connection
+
+// // Test route
+// app.get("/", (req, res) => {
+//   res.send("API is working!");
+// });
+
+// // GET: fetch all documents from a collection
+// app.get("/data", async (req, res) => {
+//   try {
+//     const db = client.db("test"); // use your database name
+//     const collection = db.collection("demo"); // use your collection name
+//     const data = await collection.find().toArray();
+//     res.json(data);
+//   } catch (err) {
+//     res.status(500).json({ error: "Failed to fetch data" });
+//   }
+// });
+
+// //fetch just one document by its ID
+// app.get("/data/:id", async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const db = client.db("test");
+//     const collection = db.collection("demo");
+
+//     const doc = await collection.findOne({ _id: new ObjectId(id) });
+
+//     if (!doc) {
+//       return res.status(404).json({ message: "Document not found" });
+//     }
+
+//     res.json(doc);
+//   } catch (err) {
+//     res.status(500).json({ error: "Failed to fetch document" });
+//   }
+// });
+
+// // Start server
+// app.listen(PORT, () => {
+//   console.log(`🚀 Server running on http://localhost:${PORT}`);
+// });
+
+// // POST route to add new document
+// app.post("/data", async (req, res) => {
+//   try {
+//     const newItem = req.body; // Get the data sent in the request body
+
+//     const db = client.db("test");
+//     const collection = db.collection("demo");
+
+//     const result = await collection.insertOne(newItem); // Insert into MongoDB
+
+//     res.status(201).json({
+//       message: "Document added successfully!",
+//       insertedId: result.insertedId,
+//     });
+//   } catch (err) {
+//     console.error("Error inserting document:", err);
+//     res.status(500).json({ error: "Failed to add document" });
+//   }
+// });
+
+// // PUT route to update a document by _id
+// app.put("/data/:id", async (req, res) => {
+//   try {
+//     const id = req.params.id; // get the ID from the URL
+//     const updatedData = req.body; // get the updated data
+//     const db = client.db("test");
+//     const collection = db.collection("demo");
+
+//     const result = await collection.updateOne(
+//       { _id: new ObjectId(id) },
+//       { $set: updatedData }
+//     );
+
+//     if (result.matchedCount === 0) {
+//       return res.status(404).json({ message: "Document not found" });
+//     }
+
+//     res.json({ message: "Document updated successfully" });
+//   } catch (err) {
+//     console.error("Error updating document:", err);
+//     res.status(500).json({ error: "Failed to update document" });
+//   }
+// });
+
+// // DELETE route to remove a document by _id
+// app.delete("/data/:id", async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const db = client.db("test");
+//     const collection = db.collection("demo");
+
+//     const result = await collection.deleteOne({ _id: new ObjectId(id) });
+
+//     if (result.deletedCount === 0) {
+//       return res.status(404).json({ message: "Document not found" });
+//     }
+
+//     res.json({ message: "Document deleted successfully" });
+//   } catch (err) {
+//     console.error("Error deleting document:", err);
+//     res.status(500).json({ error: "Failed to delete document" });
+//   }
+// });
