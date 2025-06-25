@@ -1,47 +1,55 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const logActivity = require("../utils/logActivity");
 
-// Register user
-exports.registerUser = async (req, res) => {
-  const { username, password } = req.body;
-
+const registerUser = async (req, res, next) => {
   try {
-    // Check if user exists
+    const { username, password } = req.body;
+
     const existingUser = await User.findOne({ username });
-    if (existingUser) return res.status(400).json({ message: "User already exists" });
+    if (existingUser) return res.status(400).json({ message: "Username already exists" });
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.create({ username, password: hashedPassword });
 
-    // Save user
-    const newUser = new User({ username, password: hashedPassword });
-    await newUser.save();
+    // ✅ Fixed: pass user._id directly
+    await logActivity(user._id, "REGISTER");
 
-    res.status(201).json({ message: "Registration successful" });
+    res.status(201).json({ message: "User registered" });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
-// Login user
-exports.loginUser = async (req, res) => {
-  const { username, password } = req.body;
-
+const loginUser = async (req, res, next) => {
   try {
-    // Find user
-    const user = await User.findOne({ username });
-    if (!user) return res.status(404).json({ message: "User not found" });
+    const { username, password } = req.body;
 
-    // Check password
+    const user = await User.findOne({ username });
+    if (!user) return res.status(401).json({ message: "Invalid credentials" });
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
 
-    // Generate token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign(
+      { userId: user._id, username: user.username, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    // ✅ Fixed: pass user._id directly
+    await logActivity(user._id, "LOGIN");
 
     res.json({ token });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
+
+module.exports = { registerUser, loginUser };
+
+
+
+
+
